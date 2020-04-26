@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react'
 import {Card, message} from 'antd'
 import List, {Filter, Table, Pagination} from 'nolist/lib/wrapper/antd'
-import {Input, DatePicker, Dialog, Button, Select} from 'nowrapper/lib/antd'
+import {Input, DatePicker, Dialog, Button, Select,Cascader} from 'nowrapper/lib/antd'
 //antd、noform、nowrapper、nolist的样式
 import 'antd/dist/antd.less'
 import 'nowrapper/dist/antd/index.css'
@@ -17,9 +17,8 @@ import request from '../../utils/request'
 
 
 let globalList
-const dataSource = [
-    { label: '高大上', value: '1'},
-];
+
+
 // @connect(({demo}) => ({demo}))
 class Index extends PureComponent {
     state = {}
@@ -105,6 +104,11 @@ class Index extends PureComponent {
                 }
             })
         } else if ('download' === type) {
+            let params = this.list.getFilterData()
+            let username = params.username
+            let mobile = params.mobile
+            let secret = params.secret
+            window.location.href='http://localhost:8000/learn/tbUser/PersonalListExcel?username='+username+'&mobile='+mobile+'&secret='+secret
 
         }
     }
@@ -125,7 +129,13 @@ class Index extends PureComponent {
         //     this.handleOperator('view')
         // }
     }
-
+    componentWillMount() {
+        request.get('/learn/company/listall').then(res =>{
+            if(res && res.flag){
+                this.setState({dataSource1: res.data})
+            }
+        })
+    }
     render() {
         return (
             <List url='/learn/tbUser/listRanking' pageSize={10} onError={this.handleError} onMount={this.onMount}>
@@ -133,7 +143,7 @@ class Index extends PureComponent {
                     <Filter.Item label="姓名" name="username"><Input/></Filter.Item>
                     <Filter.Item label="电话" name="mobile"><Input/></Filter.Item>
                     <Filter.Item label="名称" name="secret">
-                        <Select options={dataSource} />
+                        <Select options={this.state.dataSource1}/>
                     </Filter.Item>
                 </Filter>
                 <div className={classNames(styles.marginTop10, styles.marginBottome10)}>
@@ -151,7 +161,7 @@ class Index extends PureComponent {
                     <Table.Column title="电话" dataIndex="mobile"/>
                     <Table.Column title="所在单位" dataIndex="secret"/>
                     <Table.Column title="答题题数" dataIndex="answerNum"/>
-                    <Table.Column title="耗时" dataIndex="answerDuration"/>
+                    <Table.Column title="耗时(秒)" dataIndex="answerDuration"/>
                 </Table>
                 <Pagination/>
             </List>

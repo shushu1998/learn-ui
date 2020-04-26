@@ -23,12 +23,13 @@ let recordid
 class Index extends PureComponent {
     state = {}
     editForm(record) {
-        console.log(recordid)
-        router.push('/company/DemoForm?id=' + recordid)
+
+        console.log(record)
+        router.push('/company/DemoForm?id=' + record.id)
     }
     renderOperation = (text, record, idx) => {
-        recordid=record.id
-        return <Button onClick={this.editForm}>绑定用户</Button>
+
+        return <Button onClick={() => this.editForm(record)}>选择成员</Button>
     }
 
 
@@ -140,8 +141,7 @@ class Index extends PureComponent {
         return (
             <List url='/learn/company/list' pageSize={10} onError={this.handleError} onMount={this.onMount}>
                 <Filter cols={2}>
-                    <Filter.Item label="单位" name="username"><Input/></Filter.Item>
-
+                    <Filter.Item label="单位" name="companyName"><Input/></Filter.Item>
                 </Filter>
                 <div className={classNames(styles.marginTop10, styles.marginBottome10)}>
 
@@ -160,6 +160,8 @@ class Index extends PureComponent {
             </List>
         )
     }
+
+
 }
 
 

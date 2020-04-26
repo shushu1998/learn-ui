@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react'
-import {Card, message} from 'antd'
+import {Card, message, Modal, Spin} from 'antd'
 import List, {Filter, Table, Pagination} from 'nolist/lib/wrapper/antd'
 import {Input, DatePicker, Dialog, Button} from 'nowrapper/lib/antd'
 //antd、noform、nowrapper、nolist的样式
@@ -14,13 +14,22 @@ import styles from './index.less'
 import DemoForm from './DemoForm'
 import {connect} from 'dva'
 import request from '../../utils/request'
+import FileForm from "./FileForm";
+import router from "umi/router";
+
 
 
 let globalList
 
 // @connect(({demo}) => ({demo}))
 class Index extends PureComponent {
-    state = {}
+    state = {
+        fileList: []
+    }
+    putFileToState = file => {
+        this.setState({fileList: [...this.state.fileList, file]})
+        return false
+    }
 
     handleOperator = (type) => {
         const {dispatch} = this.props;
@@ -104,11 +113,52 @@ class Index extends PureComponent {
                     })
                 }
             })
-        } else if ('download' === type) {
+        } else if ('downloadmodle' === type) {
             let params = this.list.getFilterData()
             let content = params.content
-            // window.location.href='http://haiyingsalary.paas.casicloud.com/salLtxFile/writeExcel?content='+content
+            console.log(content)
+            window.location.href='http://localhost:8000/learn/tbSubject/downloadmodle'
+        }else if ('download' === type) {
+            let params = this.list.getFilterData()
+            let content = params.content
+            console.log(content)
+            window.location.href='http://localhost:8000/learn/tbSubject/download?content='+content
         }
+        else if ('upload' === type) {
+            Dialog.show({
+                title: '',
+                footerAlign: 'label',
+                locale: 'zh',
+                width: 300,
+                // style: {},
+                enableValidate: true,
+                content: <FileForm putFileToState={this.putFileToState}/>,
+                onOk: (values, hide) => {
+                    hide()
+                    //准备附件数据
+                    const formData = new FormData();
+                    this.state.fileList.forEach((file) => {
+                        formData.append('files', file)
+                    })
+                    const modal = Modal.info({
+                        title: '提示',
+                        content: <div><Spin/>正在操作中...</div>,
+                        okButtonProps: {disabled: true}
+                    })
+                    //异步请求
+                    request('/learn/tbSubject/tableMapInfoExcel', {method: 'post', data: formData}).then(res => {
+
+                        if(res.flag){
+                            modal.update({content: '上传成功!请刷新页面!', okButtonProps: {disabled: false}})
+                            console.log('通过了')
+                            this.onkeshu()
+                        }else{
+                            modal.update({content: '上传失败,请联系管理员!', okButtonProps: {disabled: false}})
+                        }
+                    })
+                }
+            })
+           }
     }
 
     handleError = (err) => {
@@ -126,6 +176,9 @@ class Index extends PureComponent {
             this.handleOperator('edit')
         }
     }
+    onkeshu= () => {
+        console.log('到这了')
+    }
 
     render() {
         return (
@@ -141,8 +194,12 @@ class Index extends PureComponent {
                     {/*        className={styles.marginLeft20}>浏览</Button>*/}
                     <Button icon="delete" type="primary" onClick={() => this.handleOperator('delete')}
                             className={styles.marginLeft20}>删除</Button>
+                    <Button icon="file-excel" type="primary" onClick={() => this.handleOperator('downloadmodle')}
+                            className={styles.marginLeft20}>下载模板</Button>
                     <Button icon="file-excel" type="primary" onClick={() => this.handleOperator('download')}
                             className={styles.marginLeft20}>导出</Button>
+                    <Button icon="file-excel" type="primary" onClick={() => this.handleOperator('upload')}
+                            className={styles.marginLeft20}>导入</Button>
                 </div>
                 <Table onRow={record => {
                     return {

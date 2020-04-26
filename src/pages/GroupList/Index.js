@@ -14,15 +14,15 @@ import styles from './index.less'
 import DemoForm from './DemoForm'
 import {connect} from 'dva'
 import request from '../../utils/request'
-
+const { Option } = Select;
 
 let globalList
-const dataSource = [
-    { label: '高大上', value: '1'},
-];
+
 // @connect(({demo}) => ({demo}))
 class Index extends PureComponent {
-    state = {}
+    state = {
+        data: [],
+    }
 
     handleOperator = (type) => {
         const {dispatch} = this.props;
@@ -105,6 +105,9 @@ class Index extends PureComponent {
                 }
             })
         } else if ('download' === type) {
+            let params = this.list.getFilterData()
+            let companyName = params.companyName
+            window.location.href='http://localhost:8000/learn/tbUser/GroupListExcel?companyName='+companyName
 
         }
     }
@@ -124,13 +127,22 @@ class Index extends PureComponent {
         //     this.handleOperator('edit')
         // }
     }
-
+    componentWillMount() {
+        request.get('/learn/company/listall').then(res =>{
+            if(res && res.flag){
+                this.setState({dataSource1: res.data})
+            }
+        })
+    }
     render() {
+        // const options = this.state.data.map(d => <Option key={d.value}>{d.text}</Option>);
         return (
+
             <List url='/learn/tbUser/listGroup' pageSize={10} onError={this.handleError} onMount={this.onMount}>
                 <Filter cols={2}>
                     <Filter.Item label="名称" name="companyName">
-                        <Select options={dataSource} />
+                        <Select options={this.state.dataSource1}/>
+                        {/*{options}*/}
                     </Filter.Item>
                 </Filter>
                 <div className={classNames(styles.marginTop10, styles.marginBottome10)}>
@@ -142,7 +154,7 @@ class Index extends PureComponent {
                     {/*<Button icon="delete" type="primary" onClick={() => this.handleOperator('delete')}*/}
                     {/*        className={styles.marginLeft20}>删除</Button>*/}
                     <Button icon="file-excel" type="primary" onClick={() => this.handleOperator('download')}
-                            className={styles.marginLeft20} href={'/learn/excelTemplate/download?flag='+window.location.pathname}>下载模板</Button>
+                            className={styles.marginLeft20} >导出</Button>
                 </div>
                 <Table onRow={record => {
                     return {
@@ -151,9 +163,9 @@ class Index extends PureComponent {
                     }
                 }}>
                     <Table.Column title="名次" dataIndex="ranking"/>
-                    <Table.Column title="名称" dataIndex="companyName"/>+秒
+                    <Table.Column title="名称" dataIndex="companyName"/>
                     <Table.Column title="答对题数" dataIndex="num"/>
-                    <Table.Column title="总耗时间" dataIndex="dur"/>
+                    <Table.Column title="总耗时间(秒)" dataIndex="dur"/>
                 </Table>
                 <Pagination/>
             </List>
