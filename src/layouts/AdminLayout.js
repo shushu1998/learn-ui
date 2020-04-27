@@ -45,20 +45,21 @@ class AdminLayout extends React.Component {
         })
     }
 
-    rootSubmenuKeys = ['1', '13', '25', '48']
+    rootSubmenuKeys = []
 
-    onOpenChange = (openKeys) => {
+    onOpenChange = openKeys => {
         const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1);
-        console.log(latestOpenKey)
         if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-            this.setState({openKeys});
+            this.setState({ openKeys });
         } else {
             this.setState({
                 openKeys: latestOpenKey ? [latestOpenKey] : [],
             });
         }
-    }
-
+    };
+    // componentWillMount() {
+    //     console.log(this.poe)
+    // }
     render() {
         return (
             <ConfigProvider locale={zhCN}>
@@ -78,8 +79,9 @@ class AdminLayout extends React.Component {
         }}>学习强国挑战赛
         </div>
         </div>
-                <Menu  mode="inline"   openKeys={this.state.openKeys} defaultSelectedKeys={this.state.defaultSelectedKeys} onOpenChange={this.onOpenChange}>
-                {/*<Menu  mode="inline"  defaultSelectedKeys={['5']} defaultOpenKeys={['sub2']} onOpenChange={this.onOpenChange}>>*/}
+                {/*<Menu  mode="inline"   openKeys={this.state.openKeys} defaultSelectedKeys={this.state.defaultSelectedKeys} onOpenChange={this.onOpenChange}>*/}
+                {/*<Menu  mode="inline"   selectedKeys={[this.props.location.pathname]}>*/}
+                <Menu  mode="inline"     defaultOpenKeys={['1','2','3','4']}  defaultSelectedKeys={[this.props.location.pathname]}>
     {/*        <SubMenu*/}
     {/*            key="sub1"*/}
     {/*            title={<span><Icon type="dashboard"/><span>测试</span></span>}*/}
@@ -89,31 +91,31 @@ class AdminLayout extends React.Component {
     {/*    <Menu.Item key="4"><Link to="/test">Test1</Link></Menu.Item>*/}
     {/*    </SubMenu>*/}
             <SubMenu
-                key="sub2"
+                key="1"
                 title={<span><Icon type="trophy"/><span>排行榜管理</span></span>}
             >
-                <Menu.Item key="5"><Link to="/groupList/index"><Icon type="team"/>团队排行管理</Link></Menu.Item>
-                <Menu.Item key="6"><Link to="/personalList/index"><Icon type="user"/>个人排行管理</Link></Menu.Item>
+                <Menu.Item key="/groupList/index"><Link to="/groupList/index"><Icon type="team"/>团队排行管理</Link></Menu.Item>
+                <Menu.Item key="/personalList/index"><Link to="/personalList/index"><Icon type="user"/>个人排行管理</Link></Menu.Item>
             </SubMenu>
             <SubMenu
-                key="sub3"
+                key="2"
                 title={<span><Icon type="book"/><span>题目管理</span></span>}
             >
-                <Menu.Item key="7"><Link to="/subject/index"><Icon type="book"/>题目</Link></Menu.Item>
+                <Menu.Item key="/subject/index"><Link to="/subject/index"><Icon type="book"/>题目</Link></Menu.Item>
 
             </SubMenu>
             <SubMenu
-                key="sub4"
+                key="3"
                 title={<span><Icon type="user"/><span>用户管理</span></span>}
             >
-                <Menu.Item key="8"><Link to="/sysuser/index"><Icon type="user"/>管理员用户</Link></Menu.Item>
-                <Menu.Item key="9"><Link to="/tbUser/index"><Icon type="phone"/>小程序用户</Link></Menu.Item>
+                <Menu.Item key="/sysuser/index"><Link to="/sysuser/index"><Icon type="user"/>管理员用户</Link></Menu.Item>
+                <Menu.Item key="/tbUser/index"><Link to="/tbUser/index"><Icon type="phone"/>小程序用户</Link></Menu.Item>
             </SubMenu>
             <SubMenu
-                key="sub5"
+                key="4"
                 title={<span><Icon component={BankOutlined} /><span>单位管理</span></span>}
             >
-                <Menu.Item key="10"><Link to="/company/index"><Icon component={BankOutlined} />单位管理</Link></Menu.Item>
+                <Menu.Item key="/company/index"><Link to="/company/index"><Icon component={BankOutlined} />单位管理</Link></Menu.Item>
             </SubMenu>
 
     </Menu>
