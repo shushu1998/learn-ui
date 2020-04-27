@@ -109,7 +109,7 @@ class Index extends PureComponent {
             let username = params.username
             let mobile = params.mobile
             let secret = params.secret
-            window.location.href='http://localhost:8000/learn/tbUser/PersonalListExcel?username='+username+'&mobile='+mobile+'&secret='+secret
+            window.location.href='/learn/tbUser/PersonalListExcel?username='+username+'&mobile='+mobile+'&secret='+secret
 
         }
     }

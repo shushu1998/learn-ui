@@ -117,12 +117,12 @@ class Index extends PureComponent {
             let params = this.list.getFilterData()
             let content = params.content
             console.log(content)
-            window.location.href='http://localhost:8000/learn/tbSubject/downloadmodle'
+            window.location.href='/learn/tbSubject/downloadmodle'
         }else if ('download' === type) {
             let params = this.list.getFilterData()
             let content = params.content
             console.log(content)
-            window.location.href='http://localhost:8000/learn/tbSubject/download?content='+content
+            window.location.href='/learn/tbSubject/download?content='+content
         }
         else if ('upload' === type) {
             Dialog.show({

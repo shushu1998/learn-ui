@@ -107,7 +107,7 @@ class Index extends PureComponent {
             let params = this.list.getFilterData()
             let username = params.username
             let mobile = params.mobile
-            window.location.href='http://localhost:8000/learn/tbUser/tbuserExcel?username='+username+'&mobile='+mobile
+            window.location.href='/learn/tbUser/tbuserExcel?username='+username+'&mobile='+mobile
 
         }
     }

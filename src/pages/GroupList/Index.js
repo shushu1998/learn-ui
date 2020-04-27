@@ -108,7 +108,7 @@ class Index extends PureComponent {
         } else if ('download' === type) {
             let params = this.list.getFilterData()
             let companyName = params.companyName
-            window.location.href='http://localhost:8000/learn/tbUser/GroupListExcel?companyName='+companyName
+            window.location.href='/learn/tbUser/GroupListExcel?companyName='+companyName
 
         }
     }
