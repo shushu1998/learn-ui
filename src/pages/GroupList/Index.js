@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react'
-import {Card, message} from 'antd'
+import {Card, message,Select} from 'antd'
 import List, {Filter, Table, Pagination} from 'nolist/lib/wrapper/antd'
-import {Input, DatePicker, Dialog, Button,Select} from 'nowrapper/lib/antd'
+import {Input, DatePicker, Dialog, Button} from 'nowrapper/lib/antd'
 //antd、noform、nowrapper、nolist的样式
 import 'antd/dist/antd.less'
 import 'nowrapper/dist/antd/index.css'
@@ -14,14 +14,15 @@ import styles from './index.less'
 import DemoForm from './DemoForm'
 import {connect} from 'dva'
 import request from '../../utils/request'
-const { Option } = Select;
 
 let globalList
-
+const children = [];
+const { Option } = Select;
 // @connect(({demo}) => ({demo}))
 class Index extends PureComponent {
     state = {
         data: [],
+
     }
 
     handleOperator = (type) => {
@@ -129,20 +130,28 @@ class Index extends PureComponent {
     }
     componentWillMount() {
         request.get('/learn/company/listall').then(res =>{
+
             if(res && res.flag){
-                this.setState({dataSource1: res.data})
+                for(let a = 0; a < res.data.length; a++){
+                    var value=res.data[a].value
+                    var label=res.data[a].label
+                    var valuelabel=value+"-"+label
+                    children.push(<Option key={valuelabel}>{label}</Option>);
+                }
+
             }
         })
     }
     render() {
-        // const options = this.state.data.map(d => <Option key={d.value}>{d.text}</Option>);
         return (
 
             <List url='/learn/tbUser/listGroup' pageSize={10} onError={this.handleError} onMount={this.onMount}>
                 <Filter cols={2}>
                     <Filter.Item label="名称" name="companyName">
-                        <Select options={this.state.dataSource1}/>
-                        {/*{options}*/}
+                        <Select  showSearch>
+                            {children}
+                        </Select>
+
                     </Filter.Item>
                 </Filter>
                 <div className={classNames(styles.marginTop10, styles.marginBottome10)}>

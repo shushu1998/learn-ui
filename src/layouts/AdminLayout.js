@@ -49,6 +49,7 @@ class AdminLayout extends React.Component {
 
     onOpenChange = (openKeys) => {
         const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1);
+        console.log(latestOpenKey)
         if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
             this.setState({openKeys});
         } else {
@@ -77,7 +78,8 @@ class AdminLayout extends React.Component {
         }}>学习强国挑战赛
         </div>
         </div>
-        <Menu  mode="inline"  defaultSelectedKeys={['5']} defaultOpenKeys={['sub2']}>
+                <Menu  mode="inline"   openKeys={this.state.openKeys} defaultSelectedKeys={this.state.defaultSelectedKeys} onOpenChange={this.onOpenChange}>
+                {/*<Menu  mode="inline"  defaultSelectedKeys={['5']} defaultOpenKeys={['sub2']} onOpenChange={this.onOpenChange}>>*/}
     {/*        <SubMenu*/}
     {/*            key="sub1"*/}
     {/*            title={<span><Icon type="dashboard"/><span>测试</span></span>}*/}
@@ -92,7 +94,6 @@ class AdminLayout extends React.Component {
             >
                 <Menu.Item key="5"><Link to="/groupList/index"><Icon type="team"/>团队排行管理</Link></Menu.Item>
                 <Menu.Item key="6"><Link to="/personalList/index"><Icon type="user"/>个人排行管理</Link></Menu.Item>
-
             </SubMenu>
             <SubMenu
                 key="sub3"

@@ -17,7 +17,8 @@ import request from '../../utils/request'
 
 
 let globalList
-
+const children = [];
+const { Option } = Select;
 
 // @connect(({demo}) => ({demo}))
 class Index extends PureComponent {
@@ -131,8 +132,15 @@ class Index extends PureComponent {
     }
     componentWillMount() {
         request.get('/learn/company/listall').then(res =>{
+
             if(res && res.flag){
-                this.setState({dataSource1: res.data})
+                for(let a = 0; a < res.data.length; a++){
+                    var value=res.data[a].value
+                    var label=res.data[a].label
+                    var valuelabel=value+"-"+label
+                    children.push(<Option key={valuelabel}>{label}</Option>);
+                }
+
             }
         })
     }
@@ -143,7 +151,9 @@ class Index extends PureComponent {
                     <Filter.Item label="姓名" name="username"><Input/></Filter.Item>
                     <Filter.Item label="电话" name="mobile"><Input/></Filter.Item>
                     <Filter.Item label="名称" name="secret">
-                        <Select options={this.state.dataSource1}/>
+                        <Select showSearch>
+                            {children}
+                        </Select>
                     </Filter.Item>
                 </Filter>
                 <div className={classNames(styles.marginTop10, styles.marginBottome10)}>
