@@ -141,7 +141,7 @@ class Index extends PureComponent {
         return (
             <List url='/learn/company/list' pageSize={10} onError={this.handleError} onMount={this.onMount}>
                 <Filter cols={2}>
-                    <Filter.Item label="单位" name="companyName"><Input/></Filter.Item>
+                    <Filter.Item label="单位名称" name="companyName"><Input/></Filter.Item>
                 </Filter>
                 <div className={classNames(styles.marginTop10, styles.marginBottome10)}>
 

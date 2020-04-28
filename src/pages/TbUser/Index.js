@@ -149,7 +149,7 @@ class Index extends PureComponent {
                 <Filter cols={3}>
                     <Filter.Item label="姓名" name="username"><Input/></Filter.Item>
                     <Filter.Item label="手机号码" name="mobile"><Input/></Filter.Item>
-                    <Filter.Item label="名称" name="secret">
+                    <Filter.Item label="单位名称" name="secret">
                         <Select  showSearch >
                             <Option key={'2-市委办公室'}>{'市委办公室'}</Option>
                             <Option key={'3-市政府办公室'}>{'市政府办公室'}</Option>

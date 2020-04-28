@@ -150,7 +150,7 @@ render() {
 
             <List url='/learn/tbUser/listGroup' pageSize={10} onError={this.handleError} onMount={this.onMount}>
                 <Filter cols={2}>
-                    <Filter.Item label="名称" name="companyName">
+                    <Filter.Item label="单位名称" name="companyName">
                         <Select  showSearch >
                             <Option key={'2-市委办公室'}>{'市委办公室'}</Option>
                             <Option key={'3-市政府办公室'}>{'市政府办公室'}</Option>
