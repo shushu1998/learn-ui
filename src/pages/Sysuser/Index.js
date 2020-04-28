@@ -17,7 +17,7 @@ import request from '../../utils/request'
 
 
 let globalList
-
+let MultiSelect=[]
 // @connect(({demo}) => ({demo}))
 class Index extends PureComponent {
     state = {}
@@ -48,12 +48,12 @@ class Index extends PureComponent {
             })
         } else if ('edit' === type || 'view' === type) {
 
-            if (!this.state.record) {
-                message.warning('请先单击一条数据!')
+            if (MultiSelect.length!= 1) {
+                message.warning('请选择一条数据!')
                 return
             }
             let title = 'edit' === type ? '编辑' : '浏览'
-            request('/learn/sysUser/getById?id=' + this.state.record.userId).then(res => {
+            request('/learn/sysUser/getById?id=' + MultiSelect).then(res => {
                 if (res.flag) {
                     Dialog.show({
                         title: title,
@@ -81,7 +81,7 @@ class Index extends PureComponent {
                 }
             })
         } else if ('delete' === type) {
-            if (!this.state.record) {
+            if (MultiSelect.length===0) {
                 message.warning('请先单击一条数据!')
                 return
             }
@@ -90,9 +90,9 @@ class Index extends PureComponent {
                 footerAlign: 'label',
                 locale: 'zh',
                 style: {width: '400px'},
-                content: `确定要删除用户为${this.state.record.username}的数据吗?`,
+                content: `确定要删除该数据吗?`,
                 onOk: (values, hide) => {
-                    request('/learn/sysUser/delete?id=' + this.state.record.userId).then(res => {
+                    request('/learn/sysUser/delete?id=' + MultiSelect).then(res => {
                         hide()
                         if (res.flag) {
                             globalList.refresh()
@@ -125,6 +125,19 @@ class Index extends PureComponent {
     }
 
     render() {
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+                MultiSelect=[]
+                for(let i = 0; i <selectedRows.length; i++){
+                    MultiSelect.push(selectedRows[i].userId)
+                }
+                console.log(MultiSelect);
+            } ,
+            getCheckboxProps: record => ({
+                disabled: record.name === 'Disabled User', // Column configuration not to be checked
+                name: record.name,
+            }),
+        };
         return (
             <List url='/learn/sysUser/list' pageSize={10} onError={this.handleError} onMount={this.onMount}>
                 <Filter cols={2}>
@@ -142,9 +155,13 @@ class Index extends PureComponent {
                     {/*<Button icon="file-excel" type="primary" onClick={() => this.handleOperator('download')}*/}
                     {/*        className={styles.marginLeft20} href={'/learn/excelTemplate/download?flag='+window.location.pathname}>下载模板</Button>*/}
                 </div>
-                <Table onRow={record => {
+                <Table
+                    rowSelection={{
+                        ...rowSelection,
+                    }}
+                    onRow={record => {
                     return {
-                        onClick: () => this.clickOperation('onClick', record),
+                        onClick: () =>  this.clickOperation('onClick', record),
                         onDoubleClick: () => this.clickOperation('onDoubleClick', record)
                     }
                 }}>

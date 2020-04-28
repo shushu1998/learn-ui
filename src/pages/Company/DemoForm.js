@@ -92,7 +92,7 @@ class Index extends PureComponent {
             if (res.flag) {
                 message.success("添加成功")
             } else {
-                message.error("添加失败")
+                message.error("人数已满")
             }
         })
     }

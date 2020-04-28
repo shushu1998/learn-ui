@@ -20,7 +20,7 @@ import router from "umi/router";
 
 
 let globalList
-
+let MultiSelect=[]
 // @connect(({demo}) => ({demo}))
 class Index extends PureComponent {
     state = {
@@ -58,12 +58,12 @@ class Index extends PureComponent {
                 }
             })
         } else if ('edit' === type || 'view' === type) {
-            if (!this.state.record) {
-                message.warning('请先单击一条数据!')
+            if (MultiSelect.length!= 1) {
+                message.warning('请先选择一条数据!')
                 return
             }
             let title = 'edit' === type ? '编辑' : '浏览'
-            request('/learn/tbSubject/getById?id=' + this.state.record.id).then(res => {
+            request('/learn/tbSubject/getById?id=' + MultiSelect).then(res => {
                 if (res.flag) {
                     Dialog.show({
                         title: title,
@@ -91,8 +91,8 @@ class Index extends PureComponent {
                 }
             })
         } else if ('delete' === type) {
-            if (!this.state.record) {
-                message.warning('请先单击一条数据!')
+            if (MultiSelect.length===0) {
+                message.warning('请选择至少一条数据!')
                 return
             }
             Dialog.show({
@@ -100,12 +100,12 @@ class Index extends PureComponent {
                 footerAlign: 'label',
                 locale: 'zh',
                 style: {width: '400px'},
-                content: `确定要删除id=${this.state.record.id}的数据吗?`,
+                content: `确定要删除该的数据吗?`,
                 onOk: (values, hide) => {
-                    request('/learn/tbSubject/delete?id=' + this.state.record.id).then(res => {
+                    request('/learn/tbSubject/delete?id=' + MultiSelect).then(res => {
                         hide()
                         if (res.flag) {
-                            globalList.refresh()
+                            parent.location.reload();
                             message.success("删除成功")
                         } else {
                             message.error("删除失败")
@@ -149,7 +149,7 @@ class Index extends PureComponent {
                     request('/learn/tbSubject/tableMapInfoExcel', {method: 'post', data: formData}).then(res => {
 
                         if(res.flag){
-                            modal.update({content: '上传成功!请刷新页面!', okButtonProps: {disabled: false}})
+                            modal.update({content: '上传成功!', okButtonProps: {disabled: false}})
                             console.log('通过了')
                             this.onkeshu()
                         }else{
@@ -177,10 +177,25 @@ class Index extends PureComponent {
         }
     }
     onkeshu= () => {
-        console.log('到这了')
+        setTimeout(function (){
+            parent.location.reload();
+        },1000);
     }
 
     render() {
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+                MultiSelect=[]
+                for(let i = 0; i <selectedRows.length; i++){
+                    MultiSelect.push(selectedRows[i].id)
+                }
+                console.log(MultiSelect);
+            } ,
+            getCheckboxProps: record => ({
+                disabled: record.name === 'Disabled User', // Column configuration not to be checked
+                name: record.name,
+            }),
+        };
         return (
             <List url='/learn/tbSubject/list' pageSize={10} onError={this.handleError} onMount={this.onMount}>
                 <Filter cols={2}>
@@ -201,9 +216,13 @@ class Index extends PureComponent {
                     <Button icon="file-excel" type="primary" onClick={() => this.handleOperator('upload')}
                             className={styles.marginLeft20}>导入</Button>
                 </div>
-                <Table onRow={record => {
+                <Table
+                    rowSelection={{
+                        ...rowSelection,
+                    }}
+                    onRow={record => {
                     return {
-                        onClick: () => this.clickOperation('onClick', record),
+                        onClick: () =>this.clickOperation('onClick', record),
                         onDoubleClick: () => this.clickOperation('onDoubleClick', record)
                     }
                 }}>
