@@ -84,6 +84,10 @@ class Index extends PureComponent {
 
     handleChange = targetKeys => {
         console.log(targetKeys)
+        if(targetKeys.length>3){
+            message.error("人数已满")
+            return
+        }
         this.setState({ targetKeys });
     };
     handleOperator= (text, record, idx) =>{
