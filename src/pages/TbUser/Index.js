@@ -125,9 +125,9 @@ class Index extends PureComponent {
 
     clickOperation = (type, record) => {
         this.setState({record})
-        if ('onDoubleClick' === type) {
-            this.handleOperator('view')
-        }
+        // if ('onDoubleClick' === type) {
+        //     this.handleOperator('view')
+        // }
     }
 
     render() {
@@ -246,9 +246,9 @@ class Index extends PureComponent {
                 }}>
 
                     <Table.Column title="编号" dataIndex="userId"/>
+                    <Table.Column title="姓名" dataIndex="username"/>
                     <Table.Column title="单位" dataIndex="secret"/>
                     <Table.Column title="手机号码" dataIndex="mobile"/>
-                    <Table.Column title="姓名" dataIndex="username"/>
                     <Table.Column title="答题数量" dataIndex="answerNum"/>
                     <Table.Column title="答题用时(秒)" dataIndex="answerDuration" />
                     <Table.Column title="答题时间" dataIndex="answerTime"/>

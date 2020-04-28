@@ -172,9 +172,9 @@ class Index extends PureComponent {
     clickOperation = (type, record) => {
         // console.log(type, record)
         this.setState({record})
-        if ('onDoubleClick' === type) {
-            this.handleOperator('edit')
-        }
+        // if ('onDoubleClick' === type) {
+        //     this.handleOperator('edit')
+        // }
     }
     onkeshu= () => {
         setTimeout(function (){
