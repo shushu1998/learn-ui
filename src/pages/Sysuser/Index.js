@@ -156,6 +156,7 @@ class Index extends PureComponent {
                     {/*        className={styles.marginLeft20} href={'/learn/excelTemplate/download?flag='+window.location.pathname}>下载模板</Button>*/}
                 </div>
                 <Table
+                    rowKey="id"
                     rowSelection={{
                         ...rowSelection,
                     }}

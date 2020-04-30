@@ -233,7 +233,9 @@ class Index extends PureComponent {
                     <Button icon="file-excel" type="primary" onClick={() => this.handleOperator('download')}
                             className={styles.marginLeft20} >导出</Button>
                 </div>
-                <Table onRow={record => {
+                <Table
+                    rowKey="ranking"
+                    onRow={record => {
                     return {
                         onClick: () => this.clickOperation('onClick', record),
                         onDoubleClick: () => this.clickOperation('onDoubleClick', record)

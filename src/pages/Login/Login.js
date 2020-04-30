@@ -55,18 +55,18 @@ class Login extends PureComponent {
                     <div className={styles.loginText}>登录</div>
                     <div className={styles.content}>
                         <FormItem name="username" defaultMinWidth={false}><Input style={{width: 255}}
-                                                                                  autocomplete="off"
+
                                                                                   prefix={<Icon type="user"
                                                                                                 style={{color: 'rgba(0,0,0,.25)'}}/>}
                                                                                   placeholder="登录名"
                                                                                   size='large'/></FormItem>
                         <FormItem name="password" defaultMinWidth={false}><Input style={{width: 255}}
-                                                                                      type="password" autocomplete="off"
+                                                                                      type="password"
                                                                                       prefix={<Icon type="lock"
                                                                                                     style={{color: 'rgba(0,0,0,.25)'}}/>}
                                                                                       placeholder="密码"
                                                                                       size='large'/></FormItem>
-                        <FormItem onKeydown={this.handleEnterKey}><Button size='large'
+                        <FormItem ><Button size='large'
                                                                           style={{width: 255, marginTop: 20}}
                                                                           onClick={this.handleOperator}
                                                                           type="primary">登&nbsp;&nbsp;&nbsp;&nbsp;录</Button></FormItem>

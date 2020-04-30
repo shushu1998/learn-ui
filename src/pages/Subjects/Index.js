@@ -217,6 +217,7 @@ class Index extends PureComponent {
                             className={styles.marginLeft20}>导入</Button>
                 </div>
                 <Table
+                    rowKey="id"
                     rowSelection={{
                         ...rowSelection,
                     }}
